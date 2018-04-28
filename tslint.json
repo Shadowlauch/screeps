@@ -3,9 +3,11 @@
     "tslint:recommended"
   ],
   "rules": {
+    "quotemark": [true, "single"],
     "forin": false,
     "interface-name": [true, "never-prefix"],
     "member-ordering": [false],
+    "ordered-imports": [false],
     "no-console": [false],
     "no-namespace": [true, "allow-declarations"],
     "trailing-comma": [true, {"multiline": "never", "singleline": "never"}],
