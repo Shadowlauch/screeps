@@ -4,7 +4,7 @@ export class RoleCreep {
   constructor(protected role: string, public creep: Creep) {
   }
 
-  public run(): void {
+  public run(energyLock: boolean): void {
     throw new Error('The parent run method should not be called');
   }
 

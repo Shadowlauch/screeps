@@ -2,22 +2,39 @@ import {RoleCreep} from './creeps/RoleCreep';
 import {Harvester} from './creeps/Harvester';
 import {CreepMemory} from './memory/CreepMemory';
 import {Upgrader} from './creeps/Upgrader';
+import {RoomManager} from './RoomManager';
+import {Builder} from './creeps/Builder';
 
 export class CreepManager {
   private creeps: RoleCreep[] = [];
+  private room: Room;
 
-  private readonly roles: any = {
-    harvester: {
+  private readonly roles: Array<{
+    role: string,
+    bodyParts: BodyPartConstant[],
+    maxAmount: number,
+    critical?: boolean
+  }> = [
+    {
+      role: 'harvester',
       bodyParts: [WORK, CARRY, MOVE],
-      maxAmount: 6
+      maxAmount: 6,
+      critical: true
     },
-    upgrader: {
-      bodyParts: [WORK, WORK, CARRY, MOVE],
-      maxAmount: 1
+    {
+      role: 'upgrader',
+      bodyParts: [WORK, CARRY, CARRY, MOVE, MOVE],
+      maxAmount: 2
+    },
+    {
+      role: 'builder',
+      bodyParts: [WORK, CARRY, CARRY, MOVE, MOVE],
+      maxAmount: 2
     }
-  };
+  ];
 
-  constructor(private room: Room) {
+  constructor(private roomManager: RoomManager) {
+    this.room = this.roomManager.room;
   }
 
   public run() {
@@ -32,7 +49,7 @@ export class CreepManager {
     this.spawnCreeps();
 
     for (const creep of this.creeps) {
-      creep.run();
+      creep.run(this.roomManager.memory.energyLock);
     }
   }
 
@@ -42,6 +59,8 @@ export class CreepManager {
         return new Harvester(creep);
       case 'upgrader':
         return new Upgrader(creep);
+      case 'builder':
+        return new Builder(creep);
       default:
         throw Error('Role not found');
     }
@@ -50,25 +69,34 @@ export class CreepManager {
   private spawnCreeps() {
     const spawn = Game.spawns.Spawn1;
 
-    for (const role in this.roles) {
-      const roleO = this.roles[role];
-      if (this.creeps.filter((creep) => creep.getRole() === role).length < roleO.maxAmount
-        && this.bodyPartsBuildCost(roleO.bodyParts) <= spawn.energy) {
+    for (const role of this.roles) {
+      if (this.creeps.filter((creep) => creep.getRole() === role.role).length < role.maxAmount) {
 
-        const name = this.room.name + '_' + role + '_' + Memory.uuid++;
-        const status = spawn.spawnCreep(this.roles[role].bodyParts, name, {memory: {role: role as string}});
+        if (role.critical) {
+          this.roomManager.memory.energyLock = true;
+        }
 
-        if (status === OK) {
-          const creep = Game.creeps[name];
-          this.creeps.push(this.getRoleCreep(creep));
-        } else {
-          console.log(status.toLocaleString());
+        if (this.bodyPartsBuildCost(role.bodyParts) <= spawn.energy) {
+          const name = this.room.name + '_' + role.role + '_' + Memory.uuid++;
+          const status = spawn.spawnCreep(role.bodyParts, name, {memory: {role: role.role}});
+
+          if (status === OK) {
+            const creep = Game.creeps[name];
+            this.creeps.push(this.getRoleCreep(creep));
+
+            if (role.critical) {
+              this.roomManager.memory.energyLock = false;
+            }
+            return;
+          } else {
+            console.log(status.toLocaleString());
+          }
         }
       }
     }
   }
 
-  private bodyPartsBuildCost(bodyParts: BodyPartConstant): number {
+  private bodyPartsBuildCost(bodyParts: BodyPartConstant[]): number {
     let cost = 0;
     for (const bodyPart of bodyParts) {
       switch (bodyPart) {

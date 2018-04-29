@@ -1,8 +1,8 @@
 import {RoleCreep} from './RoleCreep';
 
-export class Upgrader extends RoleCreep {
+export class Builder extends RoleCreep {
   constructor(creep: Creep) {
-    super('upgrader', creep);
+    super('builder', creep);
   }
 
   public run(energyLock: boolean): void {
@@ -12,12 +12,13 @@ export class Upgrader extends RoleCreep {
     }
     if (!this.memory.working && this.creep.carry.energy === this.creep.carryCapacity) {
       this.memory.working = true;
-      this.creep.say('⚡ upgrade');
+      this.creep.say('🚧 build');
     }
 
     if (this.memory.working) {
-      if (this.creep.room.controller && this.creep.upgradeController(this.creep.room.controller) === ERR_NOT_IN_RANGE) {
-        this.creep.moveTo(this.creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}, reusePath: 10});
+      const target = this.creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
+      if (this.creep.build(target) === ERR_NOT_IN_RANGE) {
+        this.creep.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}, reusePath: 2});
       }
     } else {
       const targets = this.creep.room.find(FIND_STRUCTURES, {
@@ -34,7 +35,7 @@ export class Upgrader extends RoleCreep {
             this.creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}, reusePath: 2});
           }
         } else {
-          this.creep.moveTo(28, 34, {visualizePathStyle: {stroke: '#ffffff'}});
+          this.creep.moveTo(20, 15, {visualizePathStyle: {stroke: '#ffffff'}});
         }
       }
     }
