@@ -1,4 +1,5 @@
 import {RoleCreep} from './RoleCreep';
+import {RoomManager} from '../RoomManager';
 
 export class Harvester extends RoleCreep {
   constructor(creep: Creep) {
@@ -39,5 +40,29 @@ export class Harvester extends RoleCreep {
         }
       }
     }
+  }
+
+  public static create(roomManager: RoomManager, creep: Creep): Harvester {
+    const harvester = new Harvester(creep);
+
+    if (harvester.memory.sourceId) {
+      return harvester;
+    }
+
+    const sources = roomManager.sources;
+    const roleConfig = roomManager.stage.roles.find((r) => r.role === 'harvester');
+
+    if (!roleConfig) {
+      throw new Error('Role harvester not found');
+    }
+    const creepsPerSource = Math.ceil(roleConfig.maxAmount / sources.length);
+    for (const source of sources) {
+      if (source.countHarvesters() < creepsPerSource) {
+        harvester.memory.sourceId = source.sourceId;
+        break;
+      }
+    }
+
+    return harvester;
   }
 }

@@ -5,4 +5,5 @@ export interface CreepMemory {
   log: boolean;
   working: boolean;
   sourceId: string;
+  containerId: string;
 }

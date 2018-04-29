@@ -4,37 +4,18 @@ import {CreepMemory} from './memory/CreepMemory';
 import {Upgrader} from './creeps/Upgrader';
 import {RoomManager} from './RoomManager';
 import {Builder} from './creeps/Builder';
+import {RoleDefinition} from './stage.config';
 
 export class CreepManager {
-  private creeps: RoleCreep[] = [];
+  public creeps: RoleCreep[] = [];
   private room: Room;
 
-  private readonly roles: Array<{
-    role: string,
-    bodyParts: BodyPartConstant[],
-    maxAmount: number,
-    critical?: boolean
-  }> = [
-    {
-      role: 'harvester',
-      bodyParts: [WORK, CARRY, MOVE],
-      maxAmount: 6,
-      critical: true
-    },
-    {
-      role: 'upgrader',
-      bodyParts: [WORK, CARRY, CARRY, MOVE, MOVE],
-      maxAmount: 2
-    },
-    {
-      role: 'builder',
-      bodyParts: [WORK, CARRY, CARRY, MOVE, MOVE],
-      maxAmount: 2
-    }
-  ];
+  private roles: RoleDefinition[];
 
   constructor(private roomManager: RoomManager) {
     this.room = this.roomManager.room;
+
+    this.roles = this.roomManager.stage.roles;
   }
 
   public run() {
@@ -56,7 +37,7 @@ export class CreepManager {
   private getRoleCreep(creep: Creep): RoleCreep {
     switch ((creep.memory as CreepMemory).role) {
       case 'harvester':
-        return new Harvester(creep);
+        return Harvester.create(this.roomManager, creep);
       case 'upgrader':
         return new Upgrader(creep);
       case 'builder':
@@ -67,6 +48,7 @@ export class CreepManager {
   }
 
   private spawnCreeps() {
+    this.roomManager.memory.energyLock = false;
     const spawn = Game.spawns.Spawn1;
 
     for (const role of this.roles) {
@@ -76,21 +58,14 @@ export class CreepManager {
           this.roomManager.memory.energyLock = true;
         }
 
-        if (this.bodyPartsBuildCost(role.bodyParts) <= spawn.energy) {
+        if (spawn.spawnCreep(role.bodyParts, 'test', {dryRun: true}) === OK
+          && (!this.roomManager.memory.energyLock || role.critical)) {
           const name = this.room.name + '_' + role.role + '_' + Memory.uuid++;
-          const status = spawn.spawnCreep(role.bodyParts, name, {memory: {role: role.role}});
+          spawn.spawnCreep(role.bodyParts, name, {memory: {role: role.role}});
 
-          if (status === OK) {
-            const creep = Game.creeps[name];
-            this.creeps.push(this.getRoleCreep(creep));
-
-            if (role.critical) {
-              this.roomManager.memory.energyLock = false;
-            }
-            return;
-          } else {
-            console.log(status.toLocaleString());
-          }
+          const creep = Game.creeps[name];
+          this.creeps.push(this.getRoleCreep(creep));
+          return;
         }
       }
     }
