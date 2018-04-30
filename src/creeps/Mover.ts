@@ -23,7 +23,7 @@ export class Mover extends RoleCreep {
         this.creep.moveTo(container, {visualizePathStyle: {stroke: '#ffaa00'}});
       }
     } else {
-      const targets = this.creep.room.find(FIND_STRUCTURES, {
+      const targets = this.creep.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: (structure) => {
           if ((structure.structureType === STRUCTURE_EXTENSION || structure.structureType === STRUCTURE_SPAWN
             || structure.structureType === STRUCTURE_TOWER) && structure.energy < structure.energyCapacity) {
@@ -36,9 +36,9 @@ export class Mover extends RoleCreep {
           }
         }
       });
-      if (targets.length > 0) {
-        if (this.creep.transfer(targets[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-          this.creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}, reusePath: 2});
+      if (targets) {
+        if (this.creep.transfer(targets, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+          this.creep.moveTo(targets, {visualizePathStyle: {stroke: '#ffffff'}, reusePath: 2});
         }
       }
     }

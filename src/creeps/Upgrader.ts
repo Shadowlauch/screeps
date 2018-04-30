@@ -21,18 +21,18 @@ export class Upgrader extends RoleCreep {
         this.creep.moveTo(this.creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}, reusePath: 10});
       }
     } else {
-      const targets = this.creep.room.find(FIND_STRUCTURES, {
+      const target = this.creep.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: (structure) => {
           return (structure.structureType === STRUCTURE_EXTENSION ||
             structure.structureType === STRUCTURE_SPAWN) && structure.energy > 0;
         }
       });
-      if (targets.length > 0) {
+      if (target) {
         if (!energyLock) {
-          const withdraw = this.creep.withdraw(targets[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE;
+          const withdraw = this.creep.withdraw(target, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE;
 
           if (withdraw) {
-            this.creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}, reusePath: 2});
+            this.creep.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}, reusePath: 2});
           }
         } else {
           this.creep.moveTo(28, 34, {visualizePathStyle: {stroke: '#ffffff'}});
