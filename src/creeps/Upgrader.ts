@@ -2,7 +2,7 @@ import {RoleCreep} from './RoleCreep';
 
 export class Upgrader extends RoleCreep {
   constructor(creep: Creep) {
-    super('upgrader', creep);
+    super(creep, 'upgrader');
   }
 
   public run(energyLock: boolean): void {

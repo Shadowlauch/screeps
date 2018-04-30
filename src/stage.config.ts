@@ -1,8 +1,15 @@
+import {RoleCreep} from './creeps/RoleCreep';
+import {Harvester} from './creeps/Harvester';
+import {Upgrader} from './creeps/Upgrader';
+import {Builder} from './creeps/Builder';
+import {Repairer} from './creeps/Repairer';
+
 export interface RoleDefinition {
   role: string;
   bodyParts: BodyPartConstant[];
   maxAmount: number;
   critical?: boolean;
+  class: typeof RoleCreep;
 }
 
 export interface StageDefiniton {
@@ -18,17 +25,26 @@ export const STAGES: StageDefiniton[] = [
         role: 'harvester',
         bodyParts: [WORK, CARRY, MOVE],
         maxAmount: 6,
-        critical: true
+        critical: true,
+        class: Harvester
       },
       {
         role: 'upgrader',
         bodyParts: [WORK, CARRY, CARRY, MOVE, MOVE],
-        maxAmount: 2
+        maxAmount: 2,
+        class: Upgrader
       },
       {
         role: 'builder',
         bodyParts: [WORK, CARRY, CARRY, MOVE, MOVE],
-        maxAmount: 2
+        maxAmount: 2,
+        class: Builder
+      },
+      {
+        role: 'repairer',
+        bodyParts: [WORK, CARRY, CARRY, MOVE, MOVE],
+        maxAmount: 2,
+        class: Repairer
       }
     ]
   },
@@ -39,29 +55,34 @@ export const STAGES: StageDefiniton[] = [
         role: 'mover',
         bodyParts: [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
         maxAmount: 4,
-        critical: true
+        critical: true,
+        class: RoleCreep
       },
       {
         role: 'harvester',
         bodyParts: [WORK, WORK, WORK, WORK, CARRY, MOVE],
         maxAmount: 4,
-        critical: true
+        critical: true,
+        class: Harvester
       },
       {
         role: 'upgrader',
         bodyParts: [WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
-        maxAmount: 2
+        maxAmount: 2,
+        class: Upgrader
       },
       {
         role: 'repairer',
         bodyParts: [WORK, CARRY, CARRY, MOVE, MOVE, MOVE],
         maxAmount: 1,
-        critical: true
+        critical: true,
+        class: Repairer
       },
       {
         role: 'builder',
         bodyParts: [WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
-        maxAmount: 2
+        maxAmount: 2,
+        class: Builder
       }
     ]
   }

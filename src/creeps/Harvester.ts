@@ -3,7 +3,7 @@ import {RoomManager} from '../RoomManager';
 
 export class Harvester extends RoleCreep {
   constructor(creep: Creep) {
-    super('harvester', creep);
+    super(creep, 'harvester');
   }
 
   public run(): void {

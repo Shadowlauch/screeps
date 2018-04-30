@@ -1,8 +1,9 @@
 import {RoleCreep} from './RoleCreep';
+import {RoomManager} from '../RoomManager';
 
 export class Builder extends RoleCreep {
   constructor(creep: Creep) {
-    super('builder', creep);
+    super(creep, 'builder');
   }
 
   public run(energyLock: boolean): void {
@@ -39,5 +40,10 @@ export class Builder extends RoleCreep {
         }
       }
     }
+  }
+
+  public static needCreep(roomManager: RoomManager): boolean {
+    const target = roomManager.room.find(FIND_CONSTRUCTION_SITES);
+    return target.length > 0;
   }
 }

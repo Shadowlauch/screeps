@@ -1,7 +1,8 @@
 import {CreepMemory} from '../memory/CreepMemory';
+import {RoomManager} from '../RoomManager';
 
 export class RoleCreep {
-  constructor(protected role: string, public creep: Creep) {
+  constructor(public creep: Creep, protected role?: string) {
   }
 
   public run(energyLock: boolean): void {
@@ -9,10 +10,14 @@ export class RoleCreep {
   }
 
   public getRole(): string {
-    return this.role;
+    return this.role || 'test';
   }
 
   get memory(): CreepMemory {
     return this.creep.memory as CreepMemory;
+  }
+
+  public static needCreep(roomManager: RoomManager): boolean {
+    return true;
   }
 }

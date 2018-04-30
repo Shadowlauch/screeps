@@ -5,6 +5,7 @@ import {Upgrader} from './creeps/Upgrader';
 import {RoomManager} from './RoomManager';
 import {Builder} from './creeps/Builder';
 import {RoleDefinition} from './stage.config';
+import {Repairer} from './creeps/Repairer';
 
 export class CreepManager {
   public creeps: RoleCreep[] = [];
@@ -42,6 +43,8 @@ export class CreepManager {
         return new Upgrader(creep);
       case 'builder':
         return new Builder(creep);
+      case 'repairer':
+        return new Repairer(creep);
       default:
         throw Error('Role not found');
     }
@@ -52,7 +55,8 @@ export class CreepManager {
     const spawn = Game.spawns.Spawn1;
 
     for (const role of this.roles) {
-      if (this.creeps.filter((creep) => creep.getRole() === role.role).length < role.maxAmount) {
+      if (this.creeps.filter((creep) => creep.getRole() === role.role).length < role.maxAmount
+      && role.class.needCreep(this.roomManager)) {
 
         if (role.critical) {
           this.roomManager.memory.energyLock = true;
