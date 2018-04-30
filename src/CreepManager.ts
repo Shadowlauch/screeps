@@ -40,11 +40,11 @@ export class CreepManager {
       case 'harvester':
         return Harvester.create(this.roomManager, creep);
       case 'upgrader':
-        return new Upgrader(creep);
+        return new Upgrader(creep, this.roomManager);
       case 'builder':
-        return new Builder(creep);
+        return new Builder(creep, this.roomManager);
       case 'repairer':
-        return new Repairer(creep);
+        return new Repairer(creep, this.roomManager);
       default:
         throw Error('Role not found');
     }

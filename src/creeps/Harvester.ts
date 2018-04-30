@@ -2,8 +2,8 @@ import {RoleCreep} from './RoleCreep';
 import {RoomManager} from '../RoomManager';
 
 export class Harvester extends RoleCreep {
-  constructor(creep: Creep) {
-    super(creep, 'harvester');
+  constructor(creep: Creep, roomManager: RoomManager) {
+    super(creep, roomManager, 'harvester');
   }
 
   public run(): void {
@@ -41,7 +41,7 @@ export class Harvester extends RoleCreep {
   }
 
   public static create(roomManager: RoomManager, creep: Creep): Harvester {
-    const harvester = new Harvester(creep);
+    const harvester = new Harvester(creep, roomManager);
 
     if (harvester.memory.sourceId) {
       return harvester;

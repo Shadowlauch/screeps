@@ -2,8 +2,8 @@ import {RoleCreep} from './RoleCreep';
 import {RoomManager} from '../RoomManager';
 
 export class Builder extends RoleCreep {
-  constructor(creep: Creep) {
-    super(creep, 'builder');
+  constructor(creep: Creep, roomManager: RoomManager) {
+    super(creep, roomManager, 'builder');
   }
 
   public run(energyLock: boolean): void {

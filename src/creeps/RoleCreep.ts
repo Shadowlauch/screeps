@@ -2,7 +2,7 @@ import {CreepMemory} from '../memory/CreepMemory';
 import {RoomManager} from '../RoomManager';
 
 export class RoleCreep {
-  constructor(public creep: Creep, protected role?: string) {
+  constructor(public creep: Creep, protected roomManager: RoomManager, protected role?: string) {
   }
 
   public run(energyLock: boolean): void {
