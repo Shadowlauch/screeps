@@ -59,7 +59,7 @@ export class Mover extends RoleCreep {
     }
     const creepsPerSource = Math.ceil(roleConfig.maxAmount / sources.length);
     for (const source of sources) {
-      if (source.countMovers() < creepsPerSource) {
+      if (source.containerId !== '' && source.countMovers() < creepsPerSource) {
         mover.memory.sourceId = source.sourceId;
         mover.memory.containerId = source.containerId;
         break;

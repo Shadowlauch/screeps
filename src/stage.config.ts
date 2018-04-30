@@ -69,7 +69,7 @@ export const STAGES: StageDefiniton[] = [
       {
         role: 'upgrader',
         bodyParts: [WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
-        maxAmount: 4,
+        maxAmount: 6,
         class: Upgrader
       },
       {

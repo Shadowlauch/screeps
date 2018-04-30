@@ -8,12 +8,13 @@ export class RoomManager {
   public roomStage = 1;
 
   constructor(private name: string, public room: Room) {
+    this.getMaxSpawnEnergy();
+    this.checkRoomStage();
+
     this.creepManager = new CreepManager(this);
   }
 
   public run() {
-    this.checkRoomStage();
-    this.getMaxSpawnEnergy();
     this.creepManager.run();
   }
 
@@ -46,6 +47,14 @@ export class RoomManager {
     }
 
     this.roomStage = this.memory.roomStage;
+    if (this.roomStage === 1) {
+      const target = this.room.find(FIND_STRUCTURES, {
+        filter: (structure) => structure.structureType === STRUCTURE_CONTAINER
+      });
+      if (this.maxEnergy >= 550 && target.length >= 2) {
+        this.roomStage = this.memory.roomStage = 2;
+      }
+    }
   }
 
   private getMaxSpawnEnergy() {

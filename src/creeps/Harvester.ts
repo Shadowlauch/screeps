@@ -64,7 +64,9 @@ export class Harvester extends RoleCreep {
     for (const source of sources) {
       if (source.countHarvesters() < creepsPerSource) {
         harvester.memory.sourceId = source.sourceId;
-        harvester.memory.containerId = source.containerId;
+        if (source.containerId !== '') {
+          harvester.memory.containerId = source.containerId;
+        }
         break;
       }
     }

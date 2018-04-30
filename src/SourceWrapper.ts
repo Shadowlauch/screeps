@@ -19,7 +19,7 @@ export class SourceWrapper {
 
   public countMovers(): number {
     return _.sum(this.roomManager.creepManager.creeps, (creep: RoleCreep) =>
-      (creep.memory.containerId === this.container.id && creep.memory.role === 'mover') ? 1 : 0);
+      (this.container && creep.memory.containerId === this.container.id && creep.memory.role === 'mover') ? 1 : 0);
   }
 
   public get sourceId(): string {
@@ -27,6 +27,6 @@ export class SourceWrapper {
   }
 
   public get containerId(): string {
-    return this.container.id;
+    return this.container ? this.container.id : '';
   }
 }
