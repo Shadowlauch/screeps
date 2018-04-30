@@ -32,6 +32,10 @@ export class RoomManager {
     return sourceWrappers;
   }
 
+  public getSourceById(id: string) {
+    return new SourceWrapper(Game.getObjectById(id) as Source, this);
+  }
+
   public get stage(): StageDefiniton {
     return STAGES[this.roomStage - 1];
   }

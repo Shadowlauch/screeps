@@ -27,13 +27,20 @@ export class Harvester extends RoleCreep {
         this.creep.moveTo(source, {visualizePathStyle: {stroke: '#ffaa00'}, reusePath: 2});
       }
     } else {
-      const target = this.creep.pos.findClosestByRange(FIND_STRUCTURES, {
-        filter: (structure) => {
-          return (structure.structureType === STRUCTURE_EXTENSION ||
-            structure.structureType === STRUCTURE_SPAWN ||
-            structure.structureType === STRUCTURE_TOWER) && structure.energy < structure.energyCapacity;
-        }
-      });
+      const source = this.roomManager.getSourceById(this.memory.sourceId);
+      let target: any;
+      if (this.memory.containerId && source.countMovers() > 0) {
+        target = Game.getObjectById(this.memory.containerId);
+      } else {
+        target = this.creep.pos.findClosestByRange(FIND_STRUCTURES, {
+          filter: (structure) => {
+            return (structure.structureType === STRUCTURE_EXTENSION ||
+              structure.structureType === STRUCTURE_SPAWN ||
+              structure.structureType === STRUCTURE_TOWER) && structure.energy < structure.energyCapacity;
+          }
+        });
+      }
+
       if (this.creep.transfer(target, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
         this.creep.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}, reusePath: 2});
       }
