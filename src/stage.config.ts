@@ -3,6 +3,7 @@ import {Harvester} from './creeps/Harvester';
 import {Upgrader} from './creeps/Upgrader';
 import {Builder} from './creeps/Builder';
 import {Repairer} from './creeps/Repairer';
+import {Mover} from './creeps/Mover';
 
 export interface RoleDefinition {
   role: string;
@@ -56,7 +57,7 @@ export const STAGES: StageDefiniton[] = [
         bodyParts: [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
         maxAmount: 4,
         critical: true,
-        class: RoleCreep
+        class: Mover
       },
       {
         role: 'harvester',
@@ -68,7 +69,7 @@ export const STAGES: StageDefiniton[] = [
       {
         role: 'upgrader',
         bodyParts: [WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
-        maxAmount: 2,
+        maxAmount: 4,
         class: Upgrader
       },
       {

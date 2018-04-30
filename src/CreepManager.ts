@@ -6,6 +6,7 @@ import {RoomManager} from './RoomManager';
 import {Builder} from './creeps/Builder';
 import {RoleDefinition} from './stage.config';
 import {Repairer} from './creeps/Repairer';
+import {Mover} from './creeps/Mover';
 
 export class CreepManager {
   public creeps: RoleCreep[] = [];
@@ -39,6 +40,8 @@ export class CreepManager {
     switch ((creep.memory as CreepMemory).role) {
       case 'harvester':
         return Harvester.create(this.roomManager, creep);
+      case 'mover':
+        return Mover.create(this.roomManager, creep);
       case 'upgrader':
         return new Upgrader(creep, this.roomManager);
       case 'builder':
