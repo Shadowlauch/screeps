@@ -37,7 +37,10 @@ export class Builder extends RoleCreep {
             this.creep.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}, reusePath: 2});
           }
         } else {
-          this.creep.moveTo(20, 15, {visualizePathStyle: {stroke: '#ffffff'}});
+
+          const upgrader = new Upgrader(this.creep, this.roomManager);
+          upgrader.run(energyLock);
+          //this.creep.moveTo(20, 15, {visualizePathStyle: {stroke: '#ffffff'}});
         }
       }
     }
