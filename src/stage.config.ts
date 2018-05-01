@@ -53,18 +53,18 @@ export const STAGES: StageDefiniton[] = [
     stage: 2,
     roles: [
       {
-        role: 'mover',
-        bodyParts: [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
-        maxAmount: 4,
-        critical: true,
-        class: Mover
-      },
-      {
         role: 'harvester',
         bodyParts: [WORK, WORK, WORK, WORK, CARRY, MOVE],
         maxAmount: 4,
         critical: true,
         class: Harvester
+      },
+      {
+        role: 'mover',
+        bodyParts: [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
+        maxAmount: 4,
+        critical: true,
+        class: Mover
       },
       {
         role: 'upgrader',
