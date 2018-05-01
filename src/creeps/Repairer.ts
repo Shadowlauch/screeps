@@ -30,18 +30,21 @@ export class Repairer extends RoleCreep {
         this.creep.moveTo(14, 34, {visualizePathStyle: {stroke: '#ffffff'}, reusePath: 2});
       }
     } else {
-      const targets = this.creep.room.find(FIND_STRUCTURES, {
-        filter: (structure) => {
-          return (structure.structureType === STRUCTURE_EXTENSION ||
-            structure.structureType === STRUCTURE_SPAWN) && structure.energy > 0;
-        }
-      });
+      if (!energyLock) {
+        const targets = this.creep.room.find(FIND_STRUCTURES, {
+          filter: (structure) => {
+            return (structure.structureType === STRUCTURE_EXTENSION ||
+              structure.structureType === STRUCTURE_SPAWN) && structure.energy > 0;
+          }
+        });
 
-      if (targets.length > 0) {
-        if (this.creep.withdraw(targets[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-          this.creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}, reusePath: 2});
+        if (targets.length > 0) {
+          if (this.creep.withdraw(targets[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+            this.creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}, reusePath: 2});
+          }
         }
       }
+
     }
   }
 

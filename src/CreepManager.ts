@@ -59,7 +59,7 @@ export class CreepManager {
 
     for (const role of this.roles) {
       if (this.creeps.filter((creep) => creep.getRole() === role.role).length < role.maxAmount
-      && role.class.needCreep(this.roomManager)) {
+        && role.class.needCreep(this.roomManager)) {
 
         if (role.critical) {
           this.roomManager.memory.energyLock = true;
@@ -72,6 +72,8 @@ export class CreepManager {
 
           const creep = Game.creeps[name];
           this.creeps.push(this.getRoleCreep(creep));
+          return;
+        } else {
           return;
         }
       }
